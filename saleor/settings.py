@@ -254,6 +254,7 @@ INSTALLED_APPS = [
     # External apps
     "versatileimagefield",
     "django_measurement",
+    "dbbackup",
     "django_prices",
     "django_prices_openexchangerates",
     "django_prices_vatlayer",
@@ -263,7 +264,8 @@ INSTALLED_APPS = [
     "django_filters",
     "phonenumber_field",
 ]
-
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/my/backup/dir/'}
 
 ENABLE_DEBUG_TOOLBAR = get_bool_from_env("ENABLE_DEBUG_TOOLBAR", False)
 if ENABLE_DEBUG_TOOLBAR:
