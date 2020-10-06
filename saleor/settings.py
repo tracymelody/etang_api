@@ -227,6 +227,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.auth",
     "django.contrib.postgres",
+    "dbbackup",
+    "django_crontab",
     # Local apps
     "saleor.plugins",
     "saleor.account",
@@ -254,7 +256,6 @@ INSTALLED_APPS = [
     # External apps
     "versatileimagefield",
     "django_measurement",
-    "dbbackup",
     "django_prices",
     "django_prices_openexchangerates",
     "django_prices_vatlayer",
@@ -264,8 +265,7 @@ INSTALLED_APPS = [
     "django_filters",
     "phonenumber_field",
 ]
-DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/my/backup/dir/'}
+# db backup
 
 ENABLE_DEBUG_TOOLBAR = get_bool_from_env("ENABLE_DEBUG_TOOLBAR", False)
 if ENABLE_DEBUG_TOOLBAR:
@@ -583,3 +583,16 @@ JWT_TTL_REFRESH = timedelta(seconds=parse(os.environ.get("JWT_TTL_REFRESH", "30 
 JWT_TTL_REQUEST_EMAIL_CHANGE = timedelta(
     seconds=parse(os.environ.get("JWT_TTL_REQUEST_EMAIL_CHANGE", "1 hour")),
 )
+
+DBBACKUP_GPG_RECIPIENT = 'E68F9AB4DF856B3868DF5A997CEEF6CBB7CBBDE9'
+DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DBBACKUP_STORAGE_OPTIONS = {
+    'access_key': AWS_ACCESS_KEY_ID,
+    'secret_key': AWS_SECRET_ACCESS_KEY,
+    'bucket_name': 'etangdbbackup',
+    'default_acl': 'private',
+}
+CRONJOBS = [
+    ('*/20 * * * *', 'external.db_backup.backup_db')
+]
+
