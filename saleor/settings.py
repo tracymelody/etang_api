@@ -593,6 +593,6 @@ DBBACKUP_STORAGE_OPTIONS = {
     'default_acl': 'private',
 }
 CRONJOBS = [
-    ('*/20 * * * *', 'external.db_backup.backup_db')
+    ('*/5 * * * * set -a && . ~/etang/.env && set +a &&', 'saleor.external.db_backup.backup_db')
 ]
 
