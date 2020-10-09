@@ -227,6 +227,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.auth",
     "django.contrib.postgres",
+    "dbbackup",
+    "django_crontab",
     # Local apps
     "saleor.plugins",
     "saleor.account",
@@ -263,7 +265,7 @@ INSTALLED_APPS = [
     "django_filters",
     "phonenumber_field",
 ]
-
+# db backup
 
 ENABLE_DEBUG_TOOLBAR = get_bool_from_env("ENABLE_DEBUG_TOOLBAR", False)
 if ENABLE_DEBUG_TOOLBAR:
@@ -353,7 +355,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 DEFAULT_COUNTRY = os.environ.get("DEFAULT_COUNTRY", "US")
-DEFAULT_CURRENCY = os.environ.get("DEFAULT_CURRENCY", "USD")
+DEFAULT_CURRENCY = os.environ.get("DEFAULT_CURRENCY", "EUR")
 DEFAULT_DECIMAL_PLACES = 3
 DEFAULT_MAX_DIGITS = 12
 DEFAULT_CURRENCY_CODE_LENGTH = 3
@@ -581,3 +583,16 @@ JWT_TTL_REFRESH = timedelta(seconds=parse(os.environ.get("JWT_TTL_REFRESH", "30 
 JWT_TTL_REQUEST_EMAIL_CHANGE = timedelta(
     seconds=parse(os.environ.get("JWT_TTL_REQUEST_EMAIL_CHANGE", "1 hour")),
 )
+
+DBBACKUP_GPG_RECIPIENT = 'E68F9AB4DF856B3868DF5A997CEEF6CBB7CBBDE9'
+DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DBBACKUP_STORAGE_OPTIONS = {
+    'access_key': AWS_ACCESS_KEY_ID,
+    'secret_key': AWS_SECRET_ACCESS_KEY,
+    'bucket_name': 'etangdbbackup',
+    'default_acl': 'private',
+}
+CRONJOBS = [
+    ('*/5 * * * * set -a && . ~/etang/.env && set +a &&', 'saleor.external.db_backup.backup_db')
+]
+
