@@ -517,6 +517,7 @@ PLUGINS = [
     "saleor.payment.gateways.braintree.plugin.BraintreeGatewayPlugin",
     "saleor.payment.gateways.razorpay.plugin.RazorpayGatewayPlugin",
     "saleor.payment.gateways.adyen.plugin.AdyenGatewayPlugin",
+    "saleor.payment.gateways.paypal.plugin.PaypalGatewayPlugin",
     "saleor.plugins.invoicing.plugin.InvoicingPlugin",
 ]
 
